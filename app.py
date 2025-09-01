@@ -97,12 +97,12 @@ if "username" not in st.session_state:
 
 if not st.session_state.authed:
     with st.form("login", clear_on_submit=False):
-        st.subheader("Login")
-        username = st.text_input("Your Name", placeholder="e.g., Alex")
-        shared_password = st.text_input("Group Password", type="password")
-        submit = st.form_submit_button("Enter")
+    st.subheader("Login")
+    username = st.text_input("Your Name", placeholder="e.g., Alex")
+    shared_password = st.text_input("Group Password", type="password")
+    submit = st.form_submit_button("Enter")
 
-    if submit:
+    if submit:  # <- outside 'with' but immediately after form
         if not username.strip():
             st.error("Please enter your name.")
         elif shared_password != get_password():
@@ -111,7 +111,8 @@ if not st.session_state.authed:
             st.session_state.authed = True
             st.session_state.username = username.strip()
             add_user(st.session_state.username)
-            st.experimental_rerun()
+            st.experimental_rerun()  # safe to call here
+
     st.stop()
 
 # ---------- Main ----------
